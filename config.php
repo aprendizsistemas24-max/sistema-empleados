@@ -1,19 +1,17 @@
 <?php
-// Configuración de la base de datos usando variables de entorno de Railway
-define('DB_HOST', getenv('MYSQLHOST') ?: 'localhost');
-define('DB_USER', getenv('MYSQLUSER') ?: 'root');
-define('DB_PASS', getenv('MYSQLPASSWORD') ?: '');
-define('DB_NAME', getenv('MYSQL_DATABASE') ?: 'sistema_empleados');
-define('DB_PORT', getenv('MYSQLPORT') ?: '3306');
+// Usar las variables de entorno que ya configuraste en Railway
+$host = getenv('MYSQLHOST');
+$user = getenv('MYSQLUSER');
+$pass = getenv('MYSQLPASSWORD');
+$db   = getenv('MYSQL_DATABASE');
+$port = getenv('MYSQLPORT');
 
-// Crear conexión incluyendo el puerto
-$conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT);
+// Conexión corregida para producción
+$conn = new mysqli($host, $user, $pass, $db, $port);
 
-// Verificar conexión
 if ($conn->connect_error) {
+    // Esto te ayudará a ver el error real si vuelve a fallar
     die("Error de conexión: " . $conn->connect_error);
 }
-
-// Configurar charset
-$conn->set_charset("utf8");
+$conn->set_charset("utf8mb4");
 ?>
