@@ -1,0 +1,37 @@
+# Configuración de Apache para el sistema de empleados
+
+# Habilitar rewrite engine
+RewriteEngine On
+
+# Proteger archivos sensibles
+<FilesMatch "(config\.php|database\.sql)">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Forzar UTF-8
+AddDefaultCharset UTF-8
+
+# Habilitar compresión GZIP
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript
+</IfModule>
+
+# Configurar páginas de error
+ErrorDocument 404 /index.php
+ErrorDocument 500 /index.php
+
+# Deshabilitar listado de directorios
+Options -Indexes
+
+# Protección contra hotlinking de archivos
+RewriteCond %{HTTP_REFERER} !^$
+RewriteCond %{HTTP_REFERER} !^http(s)?://(www\.)?tudominio.com [NC]
+RewriteRule \.(jpg|jpeg|png|gif|pdf)$ - [NC,F,L]
+
+# Mejorar seguridad
+<IfModule mod_headers.c>
+    Header set X-XSS-Protection "1; mode=block"
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+</IfModule>
